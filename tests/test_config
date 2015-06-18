@@ -1,0 +1,4 @@
+tests/testlogs/a/only_me.log
+tests/testlogs/b/.+
+tests/testlogs/c/.+\.log
+tests/testlogs/d/
