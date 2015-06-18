@@ -29,6 +29,11 @@ def create_argument_parser():
         help = 'gets files containing the given words', 
         nargs = '+' 
     )
+    parser.add_argument(
+        '-c', '--config',
+        help = 'specifies a different config file (default .logfind)',
+        default = '.logfind'
+    )
     parser.add_argument( 
         '-o', 
         help = 'uses OR logic when searching files', 
@@ -38,7 +43,6 @@ def create_argument_parser():
         '-v', '--verbose', 
         help = 'prints more verbose debug information', 
         action = 'count',
-        default = 0
     )
     return parser
     
@@ -143,7 +147,7 @@ def main():
 
     # get the list of files we're checking
     filenames = []
-    with open('.logfind') as f:
+    with open(args.config) as f:
         fsearch = read_config_file( f )
         for fname in fsearch :
             filenames += get_matching_files( fname )
