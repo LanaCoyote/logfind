@@ -13,7 +13,7 @@ def debug_print( s, lvl = 0 ):
     """
     global verbosity
 
-    if lvl < verbosity :
+    if lvl > verbosity :
         return
 
     print( "** {}".format( s ) )
