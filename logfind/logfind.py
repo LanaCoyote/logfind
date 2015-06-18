@@ -13,6 +13,7 @@ def debug_print( s, lvl = 0 ):
     """
     global verbosity
 
+    # don't print this if we're above the verbosity limit
     if lvl > verbosity :
         return
 
@@ -59,6 +60,7 @@ def read_config_file( file ):
     """ Reads the contents of the given configuration file and returns a
         list of filename regexes to search for
     """
+    # make sure we've received an actual file
     if not file :
         debug_print(
             'error reading config file: config file was None',
@@ -68,10 +70,12 @@ def read_config_file( file ):
 
     fnames = []
 
+    # loop over the file line by line
     for line in file :
-        fname = path.split( line[:-1] )
+        fname = path.split( line[:-1] ) # separate directories and filenames
         try :
             if not fname[1]:
+                # if we don't have a filename, match everything
                 fname = ( fname[0], compile('.+') )
             else :
                 fname = ( fname[0], compile( fname[1] ) )
@@ -89,17 +93,14 @@ def read_config_file( file ):
 def get_matching_files( fname ):
     """ Returns a list of files matching the given split path and regex
     """
-    if not fname[0] :
-        fname = ( getcwd(), fname[1] )
-    elif not path.exists( fname[0] ):
+    if not path.exists( fname[0] ):
         debug_print(
             'directory does not exist: {}\nskipping...'.format( fname[0] ),
             lvl = 1
         )
         return []
-    else :
-        fname = ( path.join( getcwd(), fname[0] ), fname[1] )
-
+    
+    fname = ( path.join( getcwd(), fname[0] ), fname[1] )
     files = listdir( fname[0] )
     newfiles = []
 
@@ -111,12 +112,6 @@ def get_matching_files( fname ):
     return newfiles
 
 
-def is_word_in_file( s, file ):
-    """ Returns true if the word is in the given file
-    """
-    return s in file.read()
-
-
 def get_files_with_words( files, words, use_or = False ):
     """ Returns a list of files with the given args in them
     """
@@ -124,11 +119,13 @@ def get_files_with_words( files, words, use_or = False ):
     for filename in files :
         with open( filename ) as f :
             if use_or :
+                # when doing an or search, add it if we find any word
                 for word in words:
                     if word in f.read():
                         newfiles.append( filename )
                         break
             else :
+                # otherwise we have to check that every word passes
                 for word in words:
                     if not word in f.read():
                         break
