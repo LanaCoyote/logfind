@@ -1,0 +1,3 @@
+t is practically impossible to teach good programming to students that have
+had a prior exposure to JavaScript: as potential programmers they are 
+mentally mutilated beyond hope of regeneration.

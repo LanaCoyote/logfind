@@ -93,13 +93,16 @@ def get_matching_files( fname ):
             lvl = 1
         )
         return []
+    else :
+        fname = ( path.join( getcwd(), fname[0] ), fname[1] )
 
     files = listdir( fname[0] )
     newfiles = []
 
     for file in files :
-        if path.isfile( file ) and fname[1].fullmatch( file ) :
-            newfiles.append( file )
+        fullfile = path.normpath( path.join( fname[0], file ) )
+        if path.isfile( fullfile ) and fname[1].fullmatch( file ):
+            newfiles.append( fullfile )
 
     return newfiles
 
